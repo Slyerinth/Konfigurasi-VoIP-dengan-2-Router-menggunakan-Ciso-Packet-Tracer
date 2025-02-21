@@ -1,0 +1,154 @@
+1. Konfigurasi Switch 1
+enable
+configure terminal
+interface range f0/1-4
+switchport mode access
+switchport voice vlan 1
+exit
+
+2. Konfigurasi Router-2811 (1)
+
+enable 
+configure terminal
+interface fastethernet0/0
+no shutdown
+ip address 172.16.0.1 255.255.0.0
+exit
+
+3. Konfigurasi DHCP Server
+
+ip dhcp pool PHONE
+network 172.16.0.0 255.255.0.0
+default-router 172.16.0.1
+option 150 ip 172.16.0.1
+exit
+
+4. Konfigurasi CME (call Manager Express)
+
+telephony-service
+max-ephones 5
+max-dn 5
+ip source-address 172.16.0.1 port 2000
+auto assign 1 to 4
+auto assign 5 to 6
+exit
+
+5. Mengisi Nomor Telepon
+
+ephone-dn 1
+number 1001
+exit
+ephone-dn 2
+number 1002
+exit
+ephone-dn 3
+number 1003
+exit
+
+6. Konfigurasi Kabel Serial
+
+interface serial0/0/0
+ip address 201.123.12.1 255.255.255.252
+clock rate 64000
+no shutdown
+exit
+
+7. Buat Router EIGRP
+router eigrp 1
+no auto-asummary
+network 172.16.0.0
+network 201.123.12.0
+exit
+
+8. Buat Dial Peer Voice
+
+dial-peer voice 1 vooip
+destination-pattern 2...
+session target ipv4:201.123.12.2
+exit
+
+9. Konfigurasi Switch (2)
+enable
+configure terminal
+interface range f0/5-24
+switchport mode access
+switchport voice vlan 1
+exit
+
+10. Konfigurasi Router-2811 (2)
+
+enable 
+configure terminal
+interface fastethernet0/0
+no shutdown
+ip address 172.17.0.1 255.255.0.0
+exit
+
+11. Konfigurasi DHCP Server
+
+ip dhcp pool PHONE
+network 172.17.0.0 255.255.0.0
+default-router 172.17.0.1
+option 150 ip 172.17.0.1
+exit
+
+12. Konfigurasi CME (call Manager Express)
+
+telephony-service
+max-ephones 5
+max-dn 5
+ip source-address 172.17.0.1 port 2000
+auto assign 1 to 4
+auto assign 5 to 6
+exit
+
+13. Mengisi Nomor Telepon
+
+ephone-dn 1
+number 1001
+exit
+ephone-dn 2
+number 1002
+exit
+ephone-dn 3
+number 1003
+exit
+
+14. Konfigurasi Kabel Serial
+
+interface serial0/0/0
+ip address 201.123.12.2 255.255.255.252
+no shutdown
+exit
+
+15. Buat Router EIGRP
+router eigrp 1
+no auto-asummary
+network 172.16.0.0
+network 201.123.12.0
+exit
+
+16. Buat Dial Peer Voice
+
+dial-peer voice 1 vooip
+destination-pattern 1...
+session target ipv4:201.123.12.1
+exit
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Refrensi
+
+1. https://github.com/msuchanda/VoIP-Connection-using-Cisco-Packet-Tracer
